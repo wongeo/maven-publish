@@ -1,0 +1,69 @@
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+def GROUP_ID = 'com.feng.library'
+def ARTIFACT_ID = "${project.getName()}"
+def VERSION_NAME = '2.0.1'
+
+task uploadMavenSnapshot2(dependsOn: ['assembleRelease']) {
+    doLast {
+        VERSION_NAME = "${VERSION_NAME}-SNAPSHOT"
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+
+            groupId GROUP_ID
+            version = VERSION_NAME
+            artifactId ARTIFACT_ID
+
+
+
+            task sourceJar(type: Jar) {
+                classifier = 'source'
+                try {
+                    if (components.hasWithName("java")) {
+                        from sourceSets.main.allJava
+                    } else {
+                        from android.sourceSets.main.java.srcDirs
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace()
+                }
+            }
+            artifact sourceJar
+        }
+    }
+}
+
+
+project.afterEvaluate {
+
+    tasks.whenTaskAdded { task ->
+        if (task.name.startsWith("generatePomFileForMavenPublication")) {
+            task.doFirst {
+                project.publishing.publications.maven(MavenPublication) {
+                    if (!components.hasWithName("java") ) {
+
+                        File f = file("${project.buildDir}/outputs/awb/${project.name}-release.awb");
+
+                        if (!f.exists()) {
+                            f = file("${project.buildDir}/outputs/aar/${project.name}-release.aar");
+                        }
+                        if (!f.exists()) {
+                            f = file("${project.buildDir}/outputs/awb/${project.name}-debug.awb");
+                        }
+                        if (!f.exists()) {
+                            f = file("${project.buildDir}/outputs/aar/${project.name}-debug.aar");
+                        }
+
+                        artifact f.getPath()
+                    }
+                }
+            }
+        }
+    }
+}
+
