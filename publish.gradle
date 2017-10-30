@@ -1,9 +1,11 @@
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
 
-def GROUP_ID = 'com.feng.library'
-def ARTIFACT_ID = "${project.getName()}"
-def VERSION_NAME = '1.0.1'
+ext {
+    GROUP_ID = 'com.feng.library'
+    ARTIFACT_ID = "${project.getName()}"
+    VERSION_NAME = '1.0.0'
+}
 
 // 获取Git 提交hash值
 def GIT_COMMIT_HASH = 'git log -1 --pretty=%h'.execute([], project.rootDir).text.trim()
@@ -58,7 +60,7 @@ task Test {
         }
 
         println GIT_TAG_FORWARD
-        
+
         println GIT_TAG_FORWARD.find("\\d.\\d.\\d")
     }
 }
@@ -83,7 +85,6 @@ uploadArchives {
         }
     }
 }
-
 
 //def artifactory_contextUrl = 'http://127.0.0.1/artifactory'
 //def artifactory_user = '账号'
