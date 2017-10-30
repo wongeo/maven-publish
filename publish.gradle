@@ -85,9 +85,9 @@ uploadArchives {
 }
 
 
-//def artifactory_contextUrl = 'http://192.168.6.84:8081/artifactory'
-//def artifactory_user = 'qd.app'
-//def artifactory_password = 'APHaUWn5pqN8gb9RQya5JhJwh'
+//def artifactory_contextUrl = 'http://127.0.0.1/artifactory'
+//def artifactory_user = '账号'
+//def artifactory_password = '密码'
 //def snapshot_repo = 'libs-snapshot-local'
 //def release_repo = 'gradle-release-local'
 
