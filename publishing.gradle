@@ -1,25 +1,13 @@
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
-def GROUP_ID = 'com.feng.library'
-def ARTIFACT_ID = "${project.getName()}"
-def VERSION_NAME = '2.0.1'
-
-task uploadMavenSnapshot2(dependsOn: ['assembleRelease']) {
-    doLast {
-        VERSION_NAME = "${VERSION_NAME}-SNAPSHOT"
-    }
-}
-
 publishing {
     publications {
         maven(MavenPublication) {
 
-            groupId GROUP_ID
-            version = VERSION_NAME
-            artifactId ARTIFACT_ID
-
-
+            groupId group
+            version version
+            artifactId "${project.getName()}"
 
             task sourceJar(type: Jar) {
                 classifier = 'source'
@@ -45,7 +33,7 @@ project.afterEvaluate {
         if (task.name.startsWith("generatePomFileForMavenPublication")) {
             task.doFirst {
                 project.publishing.publications.maven(MavenPublication) {
-                    if (!components.hasWithName("java") ) {
+                    if (!components.hasWithName("java")) {
 
                         File f = file("${project.buildDir}/outputs/awb/${project.name}-release.awb");
 
